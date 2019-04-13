@@ -23,28 +23,7 @@ routes.group('/materias', (router) => {
         });
     });
 
-    router.post('', [
-        check('codigo')
-        .isNumeric().withMessage('El código debe tener solo números')
-        .isLength({
-            min: 1,
-            max: 9999
-        }).withMessage('El código no puede tener mas de cuatro dígitos'),
-        check('comision')
-        .isNumeric().withMessage('La comisión debe tener solo números')
-        .isLength({
-            min: 1,
-            max: 9999
-        }).withMessage('La comisión no puede tener mas de cuatro dígitos'),
-        check('nombre')
-        .isString().withMessage('El nombre solo debe tener solo letras')
-        .isLength({
-            min: 1,
-            max: 50
-        }).withMessage('El nombre no puede tener mas de 50 caracteres'),
-        check('turno')
-        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
-    ], (req, res) => {
+    router.post('', validations(), (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             showError(errors.array())
@@ -59,28 +38,7 @@ routes.group('/materias', (router) => {
         }
     });
 
-    router.put('/:_id', [
-        check('codigo')
-        .isNumeric().withMessage('El código debe tener solo números')
-        .isLength({
-            min: 1,
-            max: 9999
-        }).withMessage('El código no puede tener mas de cuatro dígitos'),
-        check('comision')
-        .isNumeric().withMessage('La comisión debe tener solo números')
-        .isLength({
-            min: 1,
-            max: 9999
-        }).withMessage('La comisión no puede tener mas de cuatro dígitos'),
-        check('nombre')
-        .isString().withMessage('El nombre solo debe tener solo letras')
-        .isLength({
-            min: 1,
-            max: 50
-        }).withMessage('El nombre no puede tener mas de 50 caracteres'),
-        check('turno')
-        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
-    ], (req, res) => {
+    router.put('/:_id', validations(), (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             showError(errors.array(), function(result) {
@@ -106,5 +64,34 @@ routes.group('/materias', (router) => {
     })
 
 });
+
+function validations() {
+    return [
+        check('codigo')
+        .isNumeric().withMessage('El código debe tener solo números')
+        .isLength({
+            min: 1,
+            max: 9999
+        }).withMessage('El código no puede tener mas de cuatro dígitos'),
+        check('comision')
+        .isNumeric().withMessage('La comisión debe tener solo números')
+        .isLength({
+            min: 1,
+            max: 9999
+        }).withMessage('La comisión no puede tener mas de cuatro dígitos'),
+        check('nombre')
+        .isString().withMessage('El nombre solo debe tener solo letras')
+        .isLength({
+            min: 1,
+            max: 50
+        }).withMessage('El nombre no puede tener mas de 50 caracteres'),
+        check('turno')
+        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"'),
+        check('docentes')
+        .custom(value => {
+            return Array.isArray(value);
+        }).withMessage('Valor incorrecto de docentes')
+    ]
+}
 
 module.exports = routes;
