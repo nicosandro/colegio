@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const materiaController = require('./controllers/materia');
+const materiaController = require('./controllers/materiaController');
 
 mongoose.set('useCreateIndex', true);
 mongoose.connect(`mongodb://localhost:27017/colegio`, { useNewUrlParser: true });

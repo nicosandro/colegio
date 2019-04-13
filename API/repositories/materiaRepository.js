@@ -24,21 +24,17 @@ getById = (_id, callback) => {
 
 post = (materia, callback) => {
     Materia.create(materia, (err, result) => {
-        let errors;
-        console.log("errrs", err);
         if (err) {
-            errors = showErrors(err.errors);
-        }
-        if (errors.length > 0) {
-            callback({ data: errors, status: 204 });
+            callback({ data: err, status: 500 });
         }
         callback({ data: materia, status: 201 });
     });
 }
 
 put = (materiaa, callback) => {
-    const { _id, materia } = materiaa.toObject();
-    Materia.updateOne({ _id }, (err, result) => {
+    const { _id, ...materia } = materiaa;
+    Materia.updateOne({ _id }, materia, { new: true }, (err, result) => {
+        console.log("err", result);
         if (err) throw err;
         callback({ data: null, status: 204 });
     });
