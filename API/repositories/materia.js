@@ -10,4 +10,10 @@ getAll = (callback) => {
     })
 }
 
+getById = (_id, callback) => {
+    Materia.findById({ _id }, (err, result) => {
+
+    })
+}
+
 module.exports = { getAll }
