@@ -3,6 +3,7 @@ const express = require('express');
 const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
 const docenteRepository = require('../repositories/docenteRepository');
+const Materia = require('../models/materia');
 
 routes.group('/docentes', (router) => {
     router.get('', (req, res) => {
@@ -63,7 +64,37 @@ routes.group('/docentes', (router) => {
 });
 
 function validations() {
-    return []
+    return [
+        check('sueldo')
+        .isNumeric().withMessage('El sueldo debe tener solo números'),
+        check('materias')
+        .custom(value => {
+            return value.map(id => {
+                const { _id } = id;
+                Materia.findById({ _id }, (err, result) => {
+                    if (result) {
+                        return Promise.resolve(true);
+                    } else {
+                        return Promise.reject(false);
+                    }
+                })
+            });
+        }).withMessage('No existe la materia'),
+        check('esAyudante')
+        .isBoolean().withMessage('esAyudante solo puede ser "true" o "false"'),
+        check('legajo')
+        .isNumeric().withMessage('El legajo debe solo tener números')
+        .isLength({
+            min: 1,
+            max: 9999
+        }).withMessage('El legajo solo puede tenr cuatro dígitos'),
+        check('fechaAlta')
+        .toDate().withMessage('La fecha de alta tiene formato incorrecto'),
+        check('fechaBaja')
+        .toDate().withMessage('La fecha de alta tiene formato incorrecto'),
+        check('turno')
+        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
+    ]
 }
 
 module.exports = routes;
