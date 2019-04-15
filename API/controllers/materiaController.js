@@ -12,6 +12,7 @@ routes.group('/materias', (router) => {
         });
     });
 
+    
     router.get('/:id', (req, res) => {
         materiaRepository.getById(req.params.id, (result) => {
             if (result.status === 204) {
