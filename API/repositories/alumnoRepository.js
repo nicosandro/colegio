@@ -32,7 +32,7 @@ post = (alumno, callback) =>{
 }
 
 put = (alumnoo, callback) => {
-    const { _id, ...alumnoo} = alumnoo;
+    const { _id, ...alumno} = alumnoo;
     Alumno.updateOne({_id}, alumno, {new: true}, (err,result) => {
         console.log("err",result);
         if(err) throw err;
