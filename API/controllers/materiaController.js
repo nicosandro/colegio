@@ -70,13 +70,13 @@ function validations() {
     return [
         check('codigo')
         .isNumeric().withMessage('El código debe tener solo números')
-        .isLength({
+        .isInt({
             min: 1,
             max: 9999
         }).withMessage('El código no puede tener mas de cuatro dígitos'),
         check('comision')
         .isNumeric().withMessage('La comisión debe tener solo números')
-        .isLength({
+        .isInt({
             min: 1,
             max: 9999
         }).withMessage('La comisión no puede tener mas de cuatro dígitos'),
@@ -87,11 +87,7 @@ function validations() {
             max: 50
         }).withMessage('El nombre no puede tener mas de 50 caracteres'),
         check('turno')
-        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"'),
-        check('docentes')
-        .custom(value => {
-            return Array.isArray(value);
-        }).withMessage('Valor incorrecto de docentes')
+        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
     ]
 }
 
