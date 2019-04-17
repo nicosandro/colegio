@@ -5,8 +5,7 @@ const materiaSchema = new Schema({
     codigo: Number,
     comision: Number,
     nombre: String,
-    turno: String,
-    docentes: [Number]
+    turno: String
 }, { versionKey: false });
 
 module.exports = mongoose.model('Materia', materiaSchema);
