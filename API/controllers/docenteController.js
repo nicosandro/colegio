@@ -72,19 +72,17 @@ function validations() {
             return value.map(id => {
                 const { _id } = id;
                 Materia.findById({ _id }, (err, result) => {
-                    if (result) {
-                        return Promise.resolve(true);
-                    } else {
-                        return Promise.reject(false);
+                    if (!result) {
+                        return Promise.reject("Materia incorrecta");
                     }
                 })
-            });
-        }).withMessage('No existe la materia'),
+			});
+        }),
         check('esAyudante')
         .isBoolean().withMessage('esAyudante solo puede ser "true" o "false"'),
         check('legajo')
         .isNumeric().withMessage('El legajo debe solo tener números')
-        .isLength({
+        .isInt({
             min: 1,
             max: 9999
         }).withMessage('El legajo solo puede tenr cuatro dígitos'),

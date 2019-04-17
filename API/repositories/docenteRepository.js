@@ -31,7 +31,7 @@ post = (docente, callback) => {
 }
 
 put = (docentee, callback) => {
-    const { _id, ...docente } = docentee;
+	const { _id, ...docente } = docentee;
     Docente.updateOne({ _id }, docente, { new: true }, (err, result) => {
         if (err) throw err;
         callback({ data: null, status: 204 });
