@@ -5,7 +5,7 @@ const alumnoSchema = new Schema({
     legajo: Number,
     orientacion: String,
     año: Number,
-    idPersona: Number
+    persona: [{ type: Schema.Types.ObjectId, ref: 'Persona' }],
 }, {versionKey: false});
 
 module.exports = mongoose.model('Alumno',alumnoSchema);
