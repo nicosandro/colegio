@@ -33,6 +33,13 @@ routes.group('/alumnos', (router) => {
         }else {
             const alumno = {...req.body};
             alumnoRepository.post(alumno, function(result){
+                if (result.status === 201){
+                    const persona = {...alumno.persona}
+                    console.log(persona);
+                    personaRepository.post(persona, function(resultPer){
+                        res.status(resultPer.status);
+                    });
+                }
                 res.status(result.status).json(result.data);
             });
         }
@@ -83,13 +90,13 @@ function validations(){
         .isLength({
             min: 1,
             max: 9999
-        }).withMessage('El año no puede tener mas de cuatro dígitos'),
-        check('idPersona')
+        }).withMessage('El año no puede tener mas de cuatro dígitos')
+        /*check('idPersona')
         .isNumeric().withMessage('El id de persona debe tener solo números')
         .isLength({
             min: 1,
             max: 9999
-        }).withMessage('El id de persona no puede tener mas de cuatro dígitos'),
+        }).withMessage('El id de persona no puede tener mas de cuatro dígitos'),*/
     ]
 }
 
