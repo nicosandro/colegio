@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const materiaController = require('./controllers/materiaController');
 const docenteController = require('./controllers/docenteController');
 const alumnoController = require('./controllers/alumnoController');
+const orientacionController = require('./controllers/orientacionController');
 
 mongoose.set('useCreateIndex', true);
 mongoose.connect(`mongodb://localhost:27017/colegio`, { useNewUrlParser: true });
@@ -26,6 +27,7 @@ app.use(function(req, res, next) {
 app.use(materiaController);
 app.use(docenteController);
 app.use(alumnoController);
+app.use(orientacionController);
 
 const PORT = process.env.PORT || 3003
 
