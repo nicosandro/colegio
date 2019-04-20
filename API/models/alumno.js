@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const alumnoSchema = new Schema({
     legajo: Number,
     orientacion: String,
-    año: Number,
+    anio: Number,
     persona: { type: Schema.Types.ObjectId, ref: 'Persona' },
-}, {versionKey: false});
+}, { versionKey: false });
 
-module.exports = mongoose.model('Alumno',alumnoSchema);
+module.exports = mongoose.model('Alumno', alumnoSchema);

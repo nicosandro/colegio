@@ -27,7 +27,7 @@ post = (orientacion, callback) => {
         if (err) {
             callback({ data: err, status: 500 });
         }
-        callback({ data: orientacion, status: 201 });
+        callback({ data: result, status: 201 });
     });
 }
 
