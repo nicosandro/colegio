@@ -32,10 +32,11 @@ routes.group('/alumnos', (router) => {
                     res.status(500).json(result);
                 })
         } else {
+            console.log(req.body);
             let alumnoo = {...req.body };
             let { persona, ...alumno } = alumnoo;
 
-            personaRepository.post(persona, (result) => {
+            /*personaRepository.post(persona, (result) => {
                 if (result.status === 201) {
                     /**
                      * SD: (20/4/2019)
@@ -44,6 +45,7 @@ routes.group('/alumnos', (router) => {
                      * _doc estan los datos, pero hay que investigar para
                      * que esto no salga así.
                      */
+              /*      console.log(result.data);
                     const { _id, ...personaData } = result.data._doc;
                     persona = {};
                     persona._id = _id;
@@ -55,7 +57,7 @@ routes.group('/alumnos', (router) => {
                 } else {
                     res.sendStatus(500);
                 }
-            });
+            });*/
         }
     });
 
@@ -110,13 +112,20 @@ function validations() {
         .isLength({
             min: 1,
             max: 9999
-        }).withMessage('El año no puede tener mas de cuatro dígitos')
-        /*check('idPersona')
-        .isNumeric().withMessage('El id de persona debe tener solo números')
+        }).withMessage('El año no puede tener mas de cuatro dígitos'),
+        check('persona.nombre')
+        .isString().withMessage('El nombre debe tener solo letras y números')
         .isLength({
             min: 1,
-            max: 9999
-        }).withMessage('El id de persona no puede tener mas de cuatro dígitos'),*/
+            max: 50
+        }).withMessage('El nombre no puede tener mas de 50 caracteres'),
+        
+        check('persona.apellido')
+        .isString().withMessage('El nombre debe tener solo letras y números')
+        .isLength({
+            min: 1,
+            max: 50
+        }).withMessage('El nombre no puede tener mas de 50 caracteres')
     ]
 }
 

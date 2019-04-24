@@ -4,6 +4,7 @@ const express = require('express');
 const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
 const materiaRepository = require('../repositories/materiaRepository');
+const materia = require('../models/materia');
 
 routes.group('/materias', (router) => {
     router.get('', (req, res) => {
@@ -69,7 +70,15 @@ routes.group('/materias', (router) => {
 function validations() {
     return [
         check('codigo')
-        .isNumeric().withMessage('El código debe tener solo números')
+        .isNumeric().withMessage('El código debe tener solo números')       
+        .custom(codigo => {
+            return materia.findOne({codigo}).then(materia =>{
+                console.log("linea76",materia);
+                if(materia){
+                    return Promise.reject('Comision en uso');
+                }
+            })
+        })
         .isInt({
             min: 1,
             max: 9999
