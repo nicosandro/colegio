@@ -4,6 +4,7 @@ const express = require('express');
 const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
 const materiaRepository = require('../repositories/materiaRepository');
+const personaRepository = require('../repositories/personaRepository');
 
 routes.group('/materias', (router) => {
     router.get('', (req, res) => {
@@ -12,7 +13,7 @@ routes.group('/materias', (router) => {
         });
     });
 
-    
+
     router.get('/:id', (req, res) => {
         materiaRepository.getById(req.params.id, (result) => {
             if (result.status === 204) {
