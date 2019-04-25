@@ -114,18 +114,47 @@ function validations() {
             max: 9999
         }).withMessage('El año no puede tener mas de cuatro dígitos'),
         check('persona.nombre')
-        .isString().withMessage('El nombre debe tener solo letras y números')
+        .isString('el nombre no puede tener caracteres especiales')
         .isLength({
             min: 1,
             max: 50
-        }).withMessage('El nombre no puede tener mas de 50 caracteres'),
-        
+        }).withMessage('el nombre debe tener entre 1 y 50 caracteres'),
         check('persona.apellido')
-        .isString().withMessage('El nombre debe tener solo letras y números')
+        .isString('el apellido no puede tener caracteres especiales')
         .isLength({
             min: 1,
             max: 50
-        }).withMessage('El nombre no puede tener mas de 50 caracteres')
+        }).withMessage('el apellido debe tener entre 1 y 50 caracteres'),
+        check('persona.dni')
+        .isNumeric().withMessage('El dni solo debe contener números'),
+        check('persona.fechaNacimiento')
+        .toDate().withMessage('el formato de la fecha de nacimiento es incorrecto'),
+        check('persona.telefono')
+        .isNumeric().withMessage('el teléfono solo puede tener números'),
+        check('persona.mail')
+        .isEmail().withMessage('el formato del mail es incorrecto'),
+        check('persona.direccion.calle')
+        .isString().withMessage('la calle solo puede tener números y/o letras')
+        .isLength({
+            max: 50
+        }).withMessage('la calle debe tener como máximo 50 caracteres'),
+        check('persona.direccion.numero')
+        .isNumeric().withMessage('el número solo puede contener dígitos'),
+        check('persona.direccion.codigoPostal')
+        .isNumeric().withMessage('el código postal solo debe tener dígitos')
+        .isInt({
+            max: 999999
+        }),
+        check('persona.usuario')
+        .isString().withMessage('el usuario solo puede tener letras y números')
+        .isLength({
+            min: 1
+        }).withMessage('el usuario debe contener al menos 1 caracter'),
+        check('persona.contrasenia')
+        .isString().withMessage('la contrasenia solo puede tener letras y números')
+        .isLength({
+            min: 1
+        }).withMessage('la contrasenia debe contener al menos 1 caracter')
     ]
 }
 
