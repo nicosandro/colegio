@@ -1,6 +1,5 @@
 const Persona = require('../models/persona');
 const mongoose = require('mongoose');
-const showErrors = require('../extras/errors/showErrors');
 
 mongoose.Promises = global.Promise;
 
