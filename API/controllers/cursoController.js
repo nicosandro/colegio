@@ -3,6 +3,7 @@ const express = require('express');
 const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
 const cursoRepository = require('../repositories/materiaRepository');
+const { getModalidad, getAniosCursada } = require('../extras/enums/enums');
 
 routes.group('/cursos', (router) => {
     router.get('', (req, res) => {
@@ -68,13 +69,13 @@ routes.group('/cursos', (router) => {
 function validations() {
     return [
         check('anioCursada')
-        .isIn(['1_A', '1_B', '2_A', '2_B', '3_A', '3_B', '4_A', '4_B', '5_A', '5_B', '6_A', '6_B']). withMessage('El anio elegido es incorrecto'),
+        .isIn(`getAniosCursada()`). withMessage('El anio de cursada tiene que ser'+getAniosCursada()),
         check('modalidad')
-        .isIn(['PRIMARIO', 'SECUNDARIO']).withMessage('La modalidad tiene que ser "PRIMARIO" o "SECUNDARIO"'),
+        .isIn(`getModalidad()`).withMessage('La modalidad tiene que ser'+getModalidad()),
         check('aula')
         .isNumeric().withMessage('El aula solo debe tener números'),
         check('turno')
-        .isIn(['MAÑANA', 'TARDE', 'NOCHE']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
+        .isIn(`getTurnos()`).withMessage('El turno tiene que ser'+getTurnos())
     ]
 }
 

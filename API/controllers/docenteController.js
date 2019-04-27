@@ -4,6 +4,7 @@ const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
 const docenteRepository = require('../repositories/docenteRepository');
 const Materia = require('../models/materia');
+const { getTurnos } = require('../extras/enums/enums');
 
 routes.group('/docentes', (router) => {
     router.get('', (req, res) => {
@@ -91,7 +92,7 @@ function validations() {
         check('fechaBaja')
         .toDate().withMessage('La fecha de alta tiene formato incorrecto'),
         check('turno')
-        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
+        .isIn(`getTurnos()`).withMessage('El turno tiene que ser'+getTurnos())
     ]
 }
 

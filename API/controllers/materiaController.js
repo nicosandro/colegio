@@ -4,6 +4,7 @@ const express = require('express');
 const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
 const materiaRepository = require('../repositories/materiaRepository');
+const { getTurnos } = require('../extras/enums/enums');
 
 routes.group('/materias', (router) => {
     router.get('', (req, res) => {
@@ -87,7 +88,7 @@ function validations() {
             max: 50
         }).withMessage('El nombre no puede tener mas de 50 caracteres'),
         check('turno')
-        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
+        .isIn(`getTurnos()`).withMessage('El turno tiene que ser'+getTurnos())
     ]
 }
 
