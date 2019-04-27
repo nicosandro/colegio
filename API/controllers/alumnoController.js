@@ -5,6 +5,9 @@ const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
 const alumnoRepository = require('../repositories/alumnoRepository');
 const personaRepository = require('../repositories/personaRepository');
+const alumno = require('../models/alumno');
+const persona = require('../models/persona');
+
 
 routes.group('/alumnos', (router) => {
     router.get('', (req, res) => {
@@ -44,7 +47,7 @@ routes.group('/alumnos', (router) => {
                      * sale con muchos atributos mas de los normales y en
                      * _doc estan los datos, pero hay que investigar para
                      * que esto no salga así.
-                     */
+                    **/
                     const { _id, ...personaData } = result.data._doc;
                     persona = {};
                     persona._id = _id;
@@ -61,8 +64,11 @@ routes.group('/alumnos', (router) => {
     });
 
     router.put('/:_id', validations(), (req, res) => {
+        console.log(req.body);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log("here errors");
+            console.log(errors.array());
             showError(errors.array(), function(result) {
                 res.status(500).json(result);
             });
@@ -73,7 +79,6 @@ routes.group('/alumnos', (router) => {
             alumnoPersona._id = req.params._id;
 
             let { persona, ...alumno } = alumnoPersona;
-
             alumnoRepository.put(alumno, function(result) {
                 
                 personaRepository.put(persona, function(result){
