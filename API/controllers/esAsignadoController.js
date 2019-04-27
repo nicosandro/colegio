@@ -3,18 +3,20 @@ const { check, validationResult } = require('express-validator/check');
 const express = require('express');
 const showError = require('../extras/errors/showErrors');
 const routes = express.Router();
-const orientacionRepository = require('../repositories/orientacionRepository');
+const esAsignadoRepository = require('../repositories/esAsignadoRepository');
+const docente = require('../models/docente');
+const materia = require('../models/materia');
 
-routes.group('/orientaciones', (router) => {
+routes.group('/asignaciones', (router) => {
     router.get('', (req, res) => {
-        orientacionRepository.getAll((result) => {
+        esAsignadoRepository.getAll((result) => {
             res.status(result.status).json(result.data);
         });
     });
 
 
     router.get('/:id', (req, res) => {
-        orientacionRepository.getById(req.params.id, (result) => {
+        esAsignadoRepository.getById(req.params.id, (result) => {
             if (result.status === 204) {
                 res.sendStatus(result.status);
                 res.end();
@@ -32,8 +34,8 @@ routes.group('/orientaciones', (router) => {
                     res.status(500).json(result);
                 })
         } else {
-            const orientacion = {...req.body };
-            orientacionRepository.post(orientacion, function(result) {
+            const esAsignado = {...req.body };
+            esAsignadoRepository.post(esAsignado, function(result) {
                 res.status(result.status).json(result.data);
             });
         }
@@ -46,11 +48,11 @@ routes.group('/orientaciones', (router) => {
                 res.status(500).json(result);
             });
         } else {
-            let orientacion = {};
-            orientacion = {...req.body };
-            orientacion._id = req.params._id;
+            let esAsignado = {};
+            esAsignado = {...req.body };
+            esAsignado._id = req.params._id;
 
-            orientacionRepository.put(orientacion, function(result) {
+            esAsignadoRepository.put(esAsignado, function(result) {
                 res.status(result.status);
                 res.end();
             });
@@ -58,7 +60,7 @@ routes.group('/orientaciones', (router) => {
     });
 
     router.delete('/:_id', (req, res) => {
-        orientacionRepository.deletee(req.params._id, function(result) {
+        esAsignadoRepository.deletee(req.params._id, function(result) {
             res.status(result.status);
             res.end();
         })
@@ -68,12 +70,22 @@ routes.group('/orientaciones', (router) => {
 
 function validations() {
     return [
-        check('nombre')
-        .isString().withMessage('El nombre solo debe tener solo letras')
-        .isLength({
-            min: 1,
-            max: 50
-        }).withMessage('El nombre no puede tener mas de 50 caracteres')
+        check('docente')
+        .custom(_id => {
+            return docente.findOne({_id}).then(docente =>{
+                if(!docente){
+                    return Promise.reject(`No existe el docente con el id ${_id}`);
+                }
+            })
+        }),
+        check('materia')
+        .custom(_id => {
+            return materia.findOne({_id}).then(materia =>{
+                if(!materia){
+                    return Promise.reject(`No existe la materia con el id ${_id}`);
+                }
+            })
+        })
     ]
 }
 
