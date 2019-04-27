@@ -69,7 +69,19 @@ routes.group('/alumnos', (router) => {
                 res.status(500).json(result);
             });
         } else {
-            
+            let alumnoPersona = {...req.body};
+            let {persona, ...alumno} = alumnoPersona;
+
+            alumno._id = req.params._id;            
+            alumnoRepository.put(alumno, function(result){
+                if (result.status == 204){
+                    
+                    personaRepository.put(persona, function(result){
+                        res.status(result.status);
+                        res.end();
+                    })
+                }
+            })
         }
     });
 
