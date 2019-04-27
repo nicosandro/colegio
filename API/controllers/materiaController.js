@@ -43,18 +43,22 @@ routes.group('/materias', (router) => {
     router.put('/:_id', validations(), (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            showError(errors.array(), function(result) {
+            showError(errors.array()).then(result => {
                 res.status(500).json(result);
             });
         } else {
+            console.log(req.params.id)
             let materia = {};
             materia = {...req.body };
             materia._id = req.params._id;
 
-            materiaRepository.put(materia, function(result) {
-                res.status(result.status);
-                res.end();
-            });
+            console.log(materia);
+            
+                materiaRepository.put(materia, function(result) {
+                    res.status(result.status);
+                    res.end();
+                });
+            
         }
     });
 
@@ -71,11 +75,15 @@ function validations() {
     return [
         check('codigo')
         .isNumeric().withMessage('El código debe tener solo números')       
-        .custom(codigo => {
+        .custom((codigo, {req}) => {
+            const {_id} = req.params;
             return materia.findOne({codigo}).then(materia =>{
-                console.log("linea76",materia);
                 if(materia){
-                    return Promise.reject('Comision en uso');
+                    console.log("A", _id, "B", materia._id);
+                    if(_id !== materia._id){
+                        return Promise.reject('Codigo en uso');
+                    }
+                    
                 }
             })
         })
