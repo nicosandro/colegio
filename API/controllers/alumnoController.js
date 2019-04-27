@@ -35,7 +35,6 @@ routes.group('/alumnos', (router) => {
                     res.status(500).json(result);
                 })
         } else {
-            console.log(req.body);
             let alumnoo = {...req.body };
             let { persona, ...alumno } = alumnoo;
 
@@ -64,28 +63,13 @@ routes.group('/alumnos', (router) => {
     });
 
     router.put('/:_id', validations(), (req, res) => {
-        console.log(req.body);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log("here errors");
-            console.log(errors.array());
-            showError(errors.array(), function(result) {
+            showError(errors.array()).then(result => {
                 res.status(500).json(result);
             });
         } else {
-
-            let alumnoPersona = {};
-            alumnoPersona = {...req.body };
-            alumnoPersona._id = req.params._id;
-
-            let { persona, ...alumno } = alumnoPersona;
-            alumnoRepository.put(alumno, function(result) {
-                
-                personaRepository.put(persona, function(result){
-                res.status(result.status);
-                res.end();
-                });
-            });
+            
         }
     });
 
@@ -106,8 +90,7 @@ function validations() {
             max: 999999
         }).withMessage('El legajo no puede tener mas de seis dígitos'),
         check('orientacion')
-        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
-        /*.isIn(['Ciencias Naturales','Ciencias Sociales', 'Economia', 'Otro']).withMessage('Los tipos de orientaciones deben ser "Ciencias Naturales", "Ciencias Sociales", "Economia" u "Otro"'),
+        .isIn(['CS_SOCIALES', 'CS_NATURALES', 'HUMANIDADES']).withMessage('Orientación incorrecta'),
         check('anioCursada')
         .isIn(['1_A','1_B', '2_A', '2_B', '3_A', '3_B', '4_A','4_B', '5_A', '5_B', '6_A', '6_B']).withMessage('Los años deben ser "Primero A", "Primero B", "Segundo A", "Segundo B", "Tercero A", "Tercero B", "Cuarto A", "Cuarto B", "Quinto A", "Quinto A", "Sexto A" O "Sexto B"'),
         check('persona.nombre')
@@ -159,7 +142,7 @@ function validations() {
         .isLength({
             min: 1,
             max: 50
-        }).withMessage('la contrasenia debe contener al menos 1 caracter')*/
+        }).withMessage('la contrasenia debe contener al menos 1 caracter')
     ]
 }
 
