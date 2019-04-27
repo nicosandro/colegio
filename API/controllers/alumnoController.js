@@ -36,7 +36,7 @@ routes.group('/alumnos', (router) => {
             let alumnoo = {...req.body };
             let { persona, ...alumno } = alumnoo;
 
-            /*personaRepository.post(persona, (result) => {
+            personaRepository.post(persona, (result) => {
                 if (result.status === 201) {
                     /**
                      * SD: (20/4/2019)
@@ -45,7 +45,6 @@ routes.group('/alumnos', (router) => {
                      * _doc estan los datos, pero hay que investigar para
                      * que esto no salga así.
                      */
-              /*      console.log(result.data);
                     const { _id, ...personaData } = result.data._doc;
                     persona = {};
                     persona._id = _id;
@@ -57,7 +56,7 @@ routes.group('/alumnos', (router) => {
                 } else {
                     res.sendStatus(500);
                 }
-            });*/
+            });
         }
     });
 
@@ -68,13 +67,13 @@ routes.group('/alumnos', (router) => {
                 res.status(500).json(result);
             });
         } else {
-            
+
             let alumnoPersona = {};
             alumnoPersona = {...req.body };
             alumnoPersona._id = req.params._id;
 
             let { persona, ...alumno } = alumnoPersona;
-            
+
             alumnoRepository.put(alumno, function(result) {
                 
                 personaRepository.put(persona, function(result){
@@ -97,22 +96,15 @@ function validations() {
     return [
         check('legajo')
         .isNumeric().withMessage('El legajo debe tener solo números')
-        .isLength({
+        .isInt({
             min: 1,
             max: 999999
         }).withMessage('El legajo no puede tener mas de seis dígitos'),
         check('orientacion')
-        .isString().withMessage('La orientacion solo debe tener solo letras')
-        .isLength({
-            min: 1,
-            max: 50
-        }).withMessage('La orientacion no puede tener mas de 50 caracteres'),
-        check('anio')
-        .isNumeric().withMessage('El año debe tener solo números')
-        .isLength({
-            min: 1,
-            max: 9999
-        }).withMessage('El año no puede tener mas de cuatro dígitos'),
+        .isIn(['Mañana', 'Tarde', 'Noche']).withMessage('El turno tiene que ser "Mañana", "Tarde" o "Noche"')
+        /*.isIn(['Ciencias Naturales','Ciencias Sociales', 'Economia', 'Otro']).withMessage('Los tipos de orientaciones deben ser "Ciencias Naturales", "Ciencias Sociales", "Economia" u "Otro"'),
+        check('anioCursada')
+        .isIn(['1_A','1_B', '2_A', '2_B', '3_A', '3_B', '4_A','4_B', '5_A', '5_B', '6_A', '6_B']).withMessage('Los años deben ser "Primero A", "Primero B", "Segundo A", "Segundo B", "Tercero A", "Tercero B", "Cuarto A", "Cuarto B", "Quinto A", "Quinto A", "Sexto A" O "Sexto B"'),
         check('persona.nombre')
         .isString('el nombre no puede tener caracteres especiales')
         .isLength({
@@ -126,7 +118,11 @@ function validations() {
             max: 50
         }).withMessage('el apellido debe tener entre 1 y 50 caracteres'),
         check('persona.dni')
-        .isNumeric().withMessage('El dni solo debe contener números'),
+        .isNumeric().withMessage('El dni solo debe contener números')
+        .isInt({
+            min: 11111111,
+            max: 99999999
+        }),
         check('persona.fechaNacimiento')
         .toDate().withMessage('el formato de la fecha de nacimiento es incorrecto'),
         check('persona.telefono')
@@ -134,27 +130,31 @@ function validations() {
         check('persona.mail')
         .isEmail().withMessage('el formato del mail es incorrecto'),
         check('persona.direccion.calle')
-        .isString().withMessage('la calle solo puede tener números y/o letras')
+        .isString().withMessage('la calle solo puede tener letras')
         .isLength({
+            min: 1,
             max: 50
         }).withMessage('la calle debe tener como máximo 50 caracteres'),
         check('persona.direccion.numero')
         .isNumeric().withMessage('el número solo puede contener dígitos'),
         check('persona.direccion.codigoPostal')
-        .isNumeric().withMessage('el código postal solo debe tener dígitos')
+        .isNumeric().withMessage('el código postal debe tener solo dígitos')
         .isInt({
-            max: 999999
+            min: 1000,
+            max: 9999
         }),
         check('persona.usuario')
         .isString().withMessage('el usuario solo puede tener letras y números')
         .isLength({
-            min: 1
+            min: 1,
+            max: 50
         }).withMessage('el usuario debe contener al menos 1 caracter'),
         check('persona.contrasenia')
         .isString().withMessage('la contrasenia solo puede tener letras y números')
         .isLength({
-            min: 1
-        }).withMessage('la contrasenia debe contener al menos 1 caracter')
+            min: 1,
+            max: 50
+        }).withMessage('la contrasenia debe contener al menos 1 caracter')*/
     ]
 }
 
